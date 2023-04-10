@@ -1,0 +1,10 @@
+PKG_NAME=js_utils
+PKG_SUMMARY=js_utils-summary
+PKG_DESCRIPTION=js_utils-description
+PKG_KEYWORDS=js_utils-keywords
+PKG_VERSION=0.0.1
+PKG_DISTNAME=js_utils-0.0.1
+PKG_REPO=https://github.com/pnoulis/js_utils
+PKG_HOMEPAGE=https://github.com/pnoulis/js_utils#readme
+PKG_BUGREPORT=https://github.com/pnoulis/js_utils/issues
+PKG_DOCS=https://github.com/pnoulis/js_utils#readme
