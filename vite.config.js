@@ -26,6 +26,7 @@ export default defineConfig({
       entry: {
         index: "./src/index.js",
         environment: "./src/environment.js",
+        task_runners: "./src/task_runners/index.js",
       },
       name: "js_utils",
       formats: ["es"],
