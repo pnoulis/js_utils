@@ -104,5 +104,10 @@ fmt-check:
 env:
 	$(MAKE_ENV) $(params)
 
+# ------------------------------ CLEANS ------------------------------ #
+.PHONY: clean
+clean:
+	rm -rdf ./node_modules
+
 dirs:
 	$(MKDIRP) $(LOGDIR)
