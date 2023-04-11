@@ -1,1 +1,1 @@
-export * from "./environment.js";
+console.log("runn current thing");

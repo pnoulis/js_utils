@@ -24,7 +24,7 @@ export default defineConfig({
     copyPublicDir: false,
     lib: {
       entry: {
-        main: "./src/main.js",
+        index: "./src/index.js",
         environment: "./src/environment.js",
       },
       name: "js_utils",
