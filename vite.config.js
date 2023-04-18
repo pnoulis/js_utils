@@ -6,18 +6,13 @@ import { getEnvar } from "./src/environment.js";
 // https:vitejs.dev/config/
 const conf = {};
 const MODE = getEnvar("MODE", true, "production");
-
-if (!/dev/.test(MODE)) {
-  conf.build = {
-    outDir: "dist",
-  };
-}
+const HOST = getEnvar("HOST", true, "production");
 
 // https:vitejs.dev/config/
 export default defineConfig({
   ...conf,
   build: {
-    outDir: "build",
+    outDir: "dist",
     target: "esnext",
     sourcemap: true,
     emptyOutDir: true,
