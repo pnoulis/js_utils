@@ -23,8 +23,8 @@
     "./environment": {
       "import": "./dist/environment.js"
     },
-    "./task_runners": {
-      "import": "./dist/task_runners.js"
+    "./task_runner": {
+      "import": "./dist/task_runner.js"
     }
   },
   "type": "module",

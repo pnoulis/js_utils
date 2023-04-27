@@ -1,8 +1,8 @@
 function detectRuntime() {
-  if (typeof process !== "undefined") {
-    return "node";
-  } else {
+  if (typeof process === "undefined") {
     return "browser";
+  } else {
+    return "node";
   }
 }
 
@@ -11,18 +11,12 @@ function isRuntime(runtime) {
 }
 
 function detectMode() {
-  const runtime = detectRuntime();
   let mode;
 
-  switch (runtime) {
-    case "node":
-      mode = process.env.MODE;
-      break;
-    case "browser":
-      mode = import.meta.env.MODE;
-      break;
-    default:
-      throw new Error(`Unknown runtime:${runtime}`);
+  if (isRuntime("browser")) {
+    mode = `${__IMPORT__.env.MODE || ""}`;
+  } else {
+    mode = `${__PROCESS__.env.MODE || ""}` || `${__IMPORT__.env.MODE || ""}`;
   }
 
   if (!mode) {
@@ -37,13 +31,14 @@ function isMode(mode) {
 
 function getEnvar(envar, required = true, defaultValue = "") {
   let value;
-  // if (isMode("prod")) {
-  //   throw new Error("getEnvar does not work in production mode for now");
-  // }
-  if (isRuntime("node")) {
-    value = process.env[envar] || defaultValue;
+
+  if (isRuntime("browser")) {
+    value = `${__IMPORT__?.env?.[envar] || ""}` || defaultValue;
   } else {
-    value = import.meta.env[envar] || defaultValue;
+    value =
+      `${__PROCESS__?.env?.[envar] || ""}` ||
+      `${__IMPORT__?.env?.[envar] || ""}` ||
+      defaultValue;
   }
 
   if (required && !value) {
