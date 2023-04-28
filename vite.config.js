@@ -23,9 +23,6 @@ export default defineConfig({
       name: "js_utils",
       formats: ["es"],
     },
-    rollupOptions: {
-      external: ["process"],
-    },
   },
   test: {
     // ...
