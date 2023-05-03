@@ -220,7 +220,7 @@ TaskRunner.prototype.newJob = function (task, options) {
           timeout: Date.now() + (options.timeout || this.timeout),
           exec: (expired) => {
             if (expired) {
-              task(new TaskRunnerTimeout());
+              task(new Error("task timeout"));
             } else {
               try {
                 task();
@@ -235,7 +235,7 @@ TaskRunner.prototype.newJob = function (task, options) {
           timeout: Date.now() + (options.timeout || this.timeout),
           exec: (expired) => {
             if (expired) {
-              reject(new TaskRunnerTimeout());
+              reject(new Error("task timeout"));
             } else {
               try {
                 task().then(resolve, reject);
