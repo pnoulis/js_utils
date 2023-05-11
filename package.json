@@ -25,6 +25,9 @@
     },
     "./task_runner": {
       "import": "./dist/task_runner.js"
+    },
+    "./misc": {
+      "import": "./dist/misc.js"
     }
   },
   "type": "module",
