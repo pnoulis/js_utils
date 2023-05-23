@@ -1,4 +1,4 @@
-function ConsoleLogger({ logLevel = "trace" }) {
+function ConsoleLogger({ logLevel = "trace" } = {}) {
   this.logLevel = this.levels[logLevel];
 }
 
