@@ -112,7 +112,7 @@ States.Pending.prototype.init = function init() {
 
 States.Pending.prototype.poll = function poll() {
   const intervalId = setInterval(() => {
-    this.taskRunner.logger.trace("polling");
+    // this.taskRunner.logger.trace("polling");
     if (this.taskRunner.isConnected()) {
       clearInterval(intervalId);
       return this.taskRunner.setState("connected");
@@ -137,15 +137,15 @@ States.Connected = function Connected(taskRunner) {
 };
 
 States.Connected.prototype.init = function init() {
-  this.taskRunner.logger.trace("task runner service connected");
+  // this.taskRunner.logger.trace("task runner service connected");
   this.taskRunner.flush();
   this.runJobs();
 };
 
 States.Connected.prototype.runJobs = function runJobs() {
-  this.taskRunner.logger.trace(
-    `Jobs to run: ${this.taskRunner.jobQueue.length}`
-  );
+  // this.taskRunner.logger.trace(
+  //   `Jobs to run: ${this.taskRunner.jobQueue.length}`
+  // );
   if (this.taskRunner.jobQueue.length === 0) {
     this.taskRunner.setState("idle");
   } else if (!this.taskRunner.isConnected()) {
@@ -188,7 +188,7 @@ TaskRunner.prototype.parseConf = function parseConf(userConf) {
 TaskRunner.prototype.setState = function (state) {
   const oldState = `[TRANSITION]:taskRunner ${this.state?.name}`;
   this.state = this.states[state];
-  this.logger.debug(`${oldState} -> ${this.state.name}`);
+  // this.logger.debug(`${oldState} -> ${this.state.name}`);
   if (!this.state) {
     throw new TaskRunnerError(`Unrecognized state: ${state}`);
   }
@@ -246,7 +246,7 @@ TaskRunner.prototype.newJob = function (task, options) {
           },
         });
       }
-      this.logger.trace(`new job scheduled: ${this.jobQueue.length}`);
+      // this.logger.trace(`new job scheduled: ${this.jobQueue.length}`);
       cb && cb();
     });
 };

@@ -14,4 +14,10 @@ function flattenObj(obj) {
   return result;
 }
 
-export { flattenObj };
+function capitalize(...strings) {
+  return strings.length > 1
+    ? strings.map((str) => str.charAt(0).toUpperCase() + str.slice(1))
+    : strings[0].charAt(0).toUpperCase() + strings[0].slice(1);
+}
+
+export { flattenObj, capitalize };
