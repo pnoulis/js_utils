@@ -14,9 +14,10 @@ function detectMode() {
   let mode;
 
   if (isRuntime("browser")) {
-    mode = `${__IMPORT__.env.MODE || ""}`;
+    mode = `${__IMPORT__?.env?.MODE || ""}`;
   } else {
-    mode = `${__PROCESS__.env.MODE || ""}` || `${__IMPORT__.env.MODE || ""}`;
+    mode =
+      `${__PROCESS__?.env?.MODE || ""}` || `${__IMPORT__?.env?.MODE || ""}`;
   }
 
   if (!mode) {
