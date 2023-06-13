@@ -32,10 +32,25 @@ function randomReal(min, max) {
   return Math.random() * (max - min + 1) + min;
 }
 
+function membersUnique(array) {
+  for (let i = 0; i < array.length; i++) {
+    for (let y = i + 1; y < array.length; y++) {
+      if (array[i] === array[y]) return false;
+    }
+  }
+  return true;
+}
+
+function membersDuplicate() {
+  return !membersUnique();
+}
+
 export {
   flattenObj,
   capitalize,
   generateRandomName,
   randomInteger,
   randomReal,
+  membersUnique,
+  membersDuplicate,
 };
