@@ -1,4 +1,6 @@
 import { generateRandomName } from "./generateRandomName.js";
+import { cwd } from 'node:process';
+import { fileURLToPath } from "node:url";
 
 function flattenObj(obj) {
   const result = {};
