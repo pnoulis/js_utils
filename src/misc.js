@@ -1,6 +1,4 @@
 import { generateRandomName } from "./generateRandomName.js";
-import { cwd } from 'node:process';
-import { fileURLToPath } from "node:url";
 
 function flattenObj(obj) {
   const result = {};
@@ -47,6 +45,12 @@ function membersDuplicate() {
   return !membersUnique();
 }
 
+function delay(time = 1000, shouldReject = false) {
+  return new Promise((resolve, reject) =>
+    setTimeout(shouldReject ? reject : resolve, time)
+  );
+}
+
 export {
   flattenObj,
   capitalize,
@@ -55,4 +59,5 @@ export {
   randomReal,
   membersUnique,
   membersDuplicate,
+  delay,
 };
