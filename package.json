@@ -4,7 +4,9 @@
   "description": "js_utils-summary",
   "homepage": "https://github.com/pnoulis/js_utils#readme",
   "bugs": "https://github.com/pnoulis/js_utils/issues",
-  "keywords": ["js_utils-keywords"],
+  "keywords": [
+    "js_utils-keywords"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/pnoulis/js_utils.git"
@@ -15,7 +17,9 @@
     "build": "make build",
     "test": "make test"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js"
@@ -48,5 +52,8 @@
     "vite": "^4.2.1",
     "vite-plugin-node": "^3.0.2",
     "vitest": "^0.30.0"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
   }
 }
