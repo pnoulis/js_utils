@@ -91,7 +91,7 @@ function setState(state) {
   const previousState = this.state?.name;
   this.state = state;
   this.emit && this.emit("stateChange", this.state.name, previousState);
-  this.state.init();
+  this.state.init && this.state.init();
 }
 function inState(state) {
   return state === this.state.name || state === this.state.index;
