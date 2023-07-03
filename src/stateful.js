@@ -87,13 +87,11 @@ function stateful(target, states = []) {
 function getState() {
   return this.state.name;
 }
-function setState(state, cb) {
+function setState(state) {
   const previousState = this.state?.name;
   this.state = state;
-  this.state.init && this.state.init();
-  cb && cb();
   this.emit && this.emit("stateChange", this.state.name, previousState);
-  return this;
+  this.state.init();
 }
 function inState(state) {
   return state === this.state.name || state === this.state.index;
