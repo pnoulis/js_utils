@@ -1,3 +1,4 @@
+import { extractOdds, extractEvens, capitalize } from "./misc.js";
 /**
  * Stateful
  *
@@ -16,8 +17,8 @@ function stateful(target, states = []) {
   const self = target;
   // An Object
   const prototype = target.prototype;
-  const stateNames = states.map((state) => state.name.toLowerCase());
-  const stateInstances = states;
+  const stateNames = extractOdds(states);
+  const stateInstances = extractEvens(states);
 
   stateInstances.forEach((state, i) => {
     // define a name property in each STATE INSTANCE
@@ -39,7 +40,7 @@ function stateful(target, states = []) {
     });
 
     // define getters for each state in the CALLING CONTEXT
-    Object.defineProperty(prototype, `get${state.name}State`, {
+    Object.defineProperty(prototype, `get${capitalize(stateNames[i])}State`, {
       enumerable: true,
       configurable: false,
       get: function () {
@@ -90,8 +91,12 @@ function getState() {
 function setState(state) {
   const previousState = this.state?.name;
   this.state = state;
-  this.emit && this.emit("stateChange", this.state.name, previousState);
-  this.state.init && this.state.init();
+  if ("emit" in this.state) {
+    this.emit("stateChange", this.state.name, previousState);
+  }
+  if ("init" in this.state) {
+    this.state.init();
+  }
 }
 function inState(state) {
   return state === this.state.name || state === this.state.index;

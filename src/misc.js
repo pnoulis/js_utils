@@ -32,7 +32,7 @@ function randomReal(min, max) {
   return Math.random() * (max - min + 1) + min;
 }
 
-function membersUnique(array) {
+function areMembersUnique(array) {
   for (let i = 0; i < array.length; i++) {
     for (let y = i + 1; y < array.length; y++) {
       if (array[i] === array[y]) return false;
@@ -41,8 +41,8 @@ function membersUnique(array) {
   return true;
 }
 
-function membersDuplicate() {
-  return !membersUnique();
+function areMembersDuplicate(array) {
+  return !areMembersUnique(array);
 }
 
 function delay(time = 1000, shouldReject = false) {
@@ -51,13 +51,31 @@ function delay(time = 1000, shouldReject = false) {
   );
 }
 
+function extractOdds(array) {
+  const odds = [];
+  for (let i = 1; i < array.length; i += 2) {
+    odds.push(array[i]);
+  }
+  return odds;
+}
+
+function extractEvens(array) {
+  const evens = [];
+  for (let i = 0; i < array.length; i += 2) {
+    evens.push(array[i]);
+  }
+  return evens;
+}
+
 export {
   flattenObj,
   capitalize,
   generateRandomName,
   randomInteger,
   randomReal,
-  membersUnique,
-  membersDuplicate,
+  areMembersUnique,
+  areMembersDuplicate,
+  extractOdds,
+  extractEvens,
   delay,
 };

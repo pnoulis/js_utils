@@ -112,6 +112,8 @@ States.Pending.prototype.init = function init() {
 
 States.Pending.prototype.poll = function poll() {
   const intervalId = setInterval(() => {
+    // console.log("polling");
+    // console.log(this.taskRunner.isConnected());
     // this.taskRunner.logger.trace("polling");
     if (this.taskRunner.isConnected()) {
       clearInterval(intervalId);
