@@ -4,45 +4,34 @@
   "description": "js_utils-summary",
   "homepage": "https://github.com/pnoulis/js_utils#readme",
   "bugs": "https://github.com/pnoulis/js_utils/issues",
-  "keywords": [
-    "js_utils-keywords"
-  ],
+  "keywords": ["js_utils-keywords"],
   "repository": {
     "type": "git",
     "url": "https://github.com/pnoulis/js_utils.git"
   },
   "scripts": {
-    "prepare": "make build-prod",
     "dev": "make run",
     "build": "make build",
     "test": "make test"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
-    ".": {
-      "import": "./dist/index.js"
-    },
-    "./environment": {
-      "import": "./dist/environment.js"
-    },
-    "./task_runner": {
-      "import": "./dist/task_runner.js"
-    },
-    "./misc": {
-      "import": "./dist/misc.js"
-    }
+    ".": "./dist/index.js",
+    "./*.js": "./dist/*.js",
+    "./nodejs": "./dist/nodejs/index.js",
+    "./nodejs/*.js": "./dist/nodejs/*.js",
+    "./browser": "./dist/browser/index.js",
+    "./browser/*.js": "./dist/browser/*.js"
   },
   "type": "module",
   "private": true,
-  "browser": true,
   "engines": {
     "node": ">=19.8.1",
     "npm": ">=9.5.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.34",
+    "esbuild": "^0.18.11",
     "eslint": "^8.38.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",

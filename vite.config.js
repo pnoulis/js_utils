@@ -9,6 +9,7 @@ export default defineConfig({
     __IMPORT__: "import.meta",
   },
   build: {
+    minify: false,
     outDir: "dist",
     target: "esnext",
     sourcemap: true,
@@ -23,6 +24,9 @@ export default defineConfig({
       },
       name: "js_utils",
       formats: ["es"],
+    },
+    rollupOptions: {
+      external: ["node:path", "node:url", "node:fs", "node:process"],
     },
   },
   test: {

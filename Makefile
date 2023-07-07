@@ -24,7 +24,7 @@ INSTALL = /usr/bin/install
 MKDIRP = /usr/bin/mkdir -p
 SORT = /usr/bin/sort
 CP = /usr/bin/cp
-RM = /usr/bin/rm
+RM = /usr/bin/rm -rdf
 CHMOD = /usr/bin/chmod
 INTERPRETER = node
 BUNDLER = npx vite
@@ -72,6 +72,10 @@ mode ?= 'production'
 build: env
 	set -a; source ./.env && \
 	$(BUNDLER) build --mode=$(mode)
+
+build-esm:
+	$(RM) $(SRCDIR)/dist
+	$(INTERPRETER) $(SRCDIR)/esbuild.config.js
 
 # ------------------------------ TEST ------------------------------ #
 .PHONY: test
