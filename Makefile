@@ -2,6 +2,7 @@
 
 # Make and Shell behavior
 SHELL = /usr/bin/bash
+.ONESHELL:
 .DELETE_ON_ERROR:
 .DEFAULT_GOAL := all
 
@@ -26,84 +27,70 @@ SORT = /usr/bin/sort
 CP = /usr/bin/cp
 RM = /usr/bin/rm -rdf
 CHMOD = /usr/bin/chmod
-INTERPRETER = node
-BUNDLER = npx vite
+NODE = $(HOME)/.nvm/versions/node/v20.4.0/bin/node
+BUNDLER = esbuild
 TESTER = npx vitest
 LINTER = npx eslint
 FORMATER = npx prettier
 DOTENV = ~/bin/dotenv
+LOADENV = set -o allexport; source $(SRCDIR)/.env
 PRETTY_OUTPUT = npx pino-pretty
+
 
 .PHONY: all
 all: build
 
 # ------------------------------ RUN ------------------------------ #
 .PHONY: run
-mode ?= 'development'
-file ?= '$(SRCDIR)/tmp/scratch.js'
+run: file ?= '$(SRCDIR)/tmp/scratch.js'
+run: mode ?= 'development'
 run: env
-	set -a; source ./.env && \
-	$(INTERPRETER) $(file) \
-	| $(PRETTY_OUTPUT)
+	$(LOADENV); $(NODE) $(file) | $(PRETTY_OUTPUT)
 
 .PHONY: scratch
-mode ?= 'development'
+scratch: mode ?= 'development'
 scratch: env
-	set -a; source ./.env && \
-	$(INTERPRETER) ./tmp/scratch.js \
-	| $(PRETTY_OUTPUT)
+	$(LOADENV); $(NODE) ./tmp/scratch.js | $(PRETTY_OUTPUT)
 
 .PHONY: run-build
 run-build:
-	@set -a; source ./.env && \
-	$(INTERPRETER) ./dist/index.js \
-	| $(PRETTY_OUTPUT)
+	$(LOADENV); $(NODE) ./dist/index.js | $(PRETTY_OUTPUT)
 
-# ------------------------------ DEV ------------------------------ #
-.PHONY: dev
-mode ?= 'development'
-dev: env
-	set -a; source ./.env && \
-	$(BUNDLER) server --mode=$(mode)
 
 # ------------------------------ BUILD ------------------------------ #
 .PHONY: build
-mode ?= 'production'
+build: mode ?= 'production'
 build: env
-	set -a; source ./.env && \
-	$(BUNDLER) build --mode=$(mode)
-
-build-esm:
 	$(RM) $(SRCDIR)/dist
-	$(INTERPRETER) $(SRCDIR)/esbuild.config.js
+	$(LOADENV); $(NODE) $(BUNDLER).config.js
 
 # ------------------------------ TEST ------------------------------ #
 .PHONY: test
-mode ?= 'testing'
-suite ?= '*'
+test: mode ?= 'testing'
+test: suite ?= '*'
 test: env
 	set -a; source ./.env && \
 	$(TESTER) run --reporter verbose --mode=$(mode) $(suite)
 
 # ------------------------------ LINT ------------------------------ #
 .PHONY: lint
-file ?= '.'
+lint: file ?= '.'
 lint:
 	$(LINTER) --ext js,jsx --fix $(file)
 
 .PHONY: lint-check
-file ?= '.'
+lint-check: file ?= '.'
 lint-check:
 	$(LINTER) --ext js,jsx $(file)
 
 # ------------------------------ FORMAT ------------------------------ #
 .PHONY: fmt
-file ?= '.'
+fmt: file ?= '.'
 fmt:
 	$(FORMATER) --write $(file)
 
 .PHONY: fmt-check
-file ?= '.'
+fmt-check: file ?= '.'
 fmt-check:
 	$(FORMATER) --check $(file)
 
@@ -117,7 +104,7 @@ distclean: clean
 
 # ------------------------------ ENV ------------------------------#
 .PHONY: env
-mode ?= 'production'
+env: mode ?= 'production'
 env:
 	$(DOTENV) --mode=$(mode) $(ENVDIRS) | $(SORT) > $(SRCDIR)/.env
 

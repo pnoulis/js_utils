@@ -1,5 +1,14 @@
+if (!Object.hasOwn(import.meta, "env")) {
+  Object.defineProperty(import.meta, "env", {
+    value: {},
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  });
+}
+
 function detectRuntime() {
-  if (typeof process === "undefined") {
+  if (typeof globalThis.process === "undefined") {
     return "browser";
   } else {
     return "node";
@@ -12,14 +21,11 @@ function isRuntime(runtime) {
 
 function detectMode() {
   let mode;
-
   if (isRuntime("browser")) {
-    mode = `${__IMPORT__?.env?.MODE || ""}`;
+    mode = import.meta.env.MODE;
   } else {
-    mode =
-      `${__PROCESS__?.env?.MODE || ""}` || `${__IMPORT__?.env?.MODE || ""}`;
+    mode = import.meta.env.MODE || globalThis.process.env.MODE;
   }
-
   if (!mode) {
     throw new Error("Could not detect mode");
   }
@@ -32,17 +38,13 @@ function isMode(mode) {
 
 function getEnvar(envar, required = true, defaultValue = "") {
   let value;
-
   if (isRuntime("browser")) {
-    value = `${__IMPORT__?.env?.[envar] || ""}` || defaultValue;
+    value = import.meta.env[envar] || defaultValue;
   } else {
     value =
-      `${__PROCESS__?.env?.[envar] || ""}` ||
-      `${__IMPORT__?.env?.[envar] || ""}` ||
-      defaultValue;
+      import.meta.env[envar] || globalThis.process.env[envar] || defaultValue;
   }
-
-  if (required && !value) {
+  if (!value && required) {
     throw new Error(`Missing environment variable:${envar}`);
   }
   return value;

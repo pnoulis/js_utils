@@ -17,11 +17,12 @@
   "files": ["dist"],
   "exports": {
     ".": "./dist/index.js",
-    "./*.js": "./dist/*.js",
+    "./*": "./dist/*.js",
+    "./task_runners": "./dist/task_runners/index.js",
     "./nodejs": "./dist/nodejs/index.js",
-    "./nodejs/*.js": "./dist/nodejs/*.js",
+    "./nodejs/*": "./dist/nodejs/*.js",
     "./browser": "./dist/browser/index.js",
-    "./browser/*.js": "./dist/browser/*.js"
+    "./browser/*": "./dist/browser/*.js"
   },
   "type": "module",
   "private": true,

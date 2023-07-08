@@ -11,7 +11,7 @@ import * as esbuild from "esbuild";
 const SRCDIR = ".";
 const BUILDIR = SRCDIR;
 const DISTDIR = `${BUILDIR}/dist`;
-const MODE = "production";
+const MODE = process.env.MODE;
 let BUILD_OPTIONS = undefined;
 
 if (MODE === "production") {
@@ -34,7 +34,11 @@ const nodejs = {
   target: "esnext",
   format: "esm",
   packages: "external",
-  entryPoints: ["./src/node/index.js", "./src/node/paths.js"],
+  entryPoints: [
+    "./src/node/index.js",
+    "./src/node/paths.js",
+    "./src/node/loadenv.js",
+  ],
   entryNames: "[dir]/[name]",
   outdir: `${DISTDIR}/node`,
   ...BUILD_OPTIONS,
@@ -56,6 +60,7 @@ const browser = {
 const neutral = {
   bundle: true,
   platform: "neutral",
+  packages: "external",
   target: "esnext",
   format: "esm",
   entryPoints: [
@@ -67,6 +72,7 @@ const neutral = {
     "./src/neutral/generateRandomName.js",
     "./src/neutral/environment.js",
     "./src/neutral/ConsoleLogger.js",
+    "./src/neutral/task_runners/index.js",
     "./src/neutral/task_runners/TaskRunner.js",
   ],
   entryNames: "[dir]/[name]",
