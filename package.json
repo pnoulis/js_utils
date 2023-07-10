@@ -19,8 +19,8 @@
     ".": "./dist/index.js",
     "./*": "./dist/*.js",
     "./task_runners": "./dist/task_runners/index.js",
-    "./nodejs": "./dist/nodejs/index.js",
-    "./nodejs/*": "./dist/nodejs/*.js",
+    "./node": "./dist/node/index.js",
+    "./node/*": "./dist/node/*.js",
     "./browser": "./dist/browser/index.js",
     "./browser/*": "./dist/browser/*.js"
   },
