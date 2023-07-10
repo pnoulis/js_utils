@@ -1,18 +1,11 @@
-if (!Object.hasOwn(import.meta, "env")) {
-  Object.defineProperty(import.meta, "env", {
-    value: {},
-    enumerable: true,
-    configurable: true,
-    writable: true,
-  });
-}
-
+// runtime detection
+const browser = globalThis.window;
+const webWorker = !browser && globalThis.self;
+const node = globalThis.process;
 function detectRuntime() {
-  if (typeof globalThis.process === "undefined") {
-    return "browser";
-  } else {
-    return "node";
-  }
+  return (
+    (browser && "browser") || (webWorker && "webWorker") || (node && "node")
+  );
 }
 
 function isRuntime(runtime) {
@@ -20,34 +13,33 @@ function isRuntime(runtime) {
 }
 
 function detectMode() {
-  let mode;
-  if (isRuntime("browser")) {
-    mode = import.meta.env.MODE;
-  } else {
-    mode = import.meta.env.MODE || globalThis.process.env.MODE;
-  }
-  if (!mode) {
-    throw new Error("Could not detect mode");
-  }
-  return mode;
+  return getEnvar("MODE", true);
 }
 
 function isMode(mode) {
   return mode === detectMode();
 }
 
-function getEnvar(envar, required = true, defaultValue = "") {
+function getEnvar(envar = "", required = true, defaultValue = "") {
   let value;
-  if (isRuntime("browser")) {
-    value = import.meta.env[envar] || defaultValue;
-  } else {
-    value =
-      import.meta.env[envar] || globalThis.process.env[envar] || defaultValue;
+
+  value = globalThis.__ENV__?.[envar];
+  if (value) {
+    return value;
   }
+  value = import.meta.env?.[envar];
+  if (value) {
+    return value;
+  }
+  value = globalThis.process?.env[envar];
+  if (value) {
+    return value;
+  }
+  value = defaultValue;
   if (!value && required) {
     throw new Error(`Missing environment variable:${envar}`);
   }
-  return value;
+  return value || defaultValue;
 }
 
 export { detectRuntime, isRuntime, detectMode, isMode, getEnvar };

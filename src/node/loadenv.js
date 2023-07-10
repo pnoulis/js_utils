@@ -4,16 +4,7 @@ import path from "node:path";
 import * as fs from "node:fs";
 import process from "node:process";
 
-if (!Object.hasOwn(import.meta, "env")) {
-  Object.defineProperty(import.meta, "env", {
-    value: {},
-    enumerable: true,
-    configurable: true,
-    writable: true,
-  });
-}
-
-function loadenv(envpath) {
+function loadenv(envpath, to) {
   if (envpath) {
     envpath = path.resolve(envpath);
   } else {
@@ -24,7 +15,7 @@ function loadenv(envpath) {
   }
 
   if (!/\/?env[^\/]*$/.test(envpath)) {
-    envpath += '/.env';
+    envpath += "/.env";
   }
 
   let data = undefined;
@@ -37,7 +28,14 @@ function loadenv(envpath) {
     throw new Error(`loadenv() failed to read: ${envpath}`, { cause: err });
   }
 
-  return parsenv(data);
+  if (!to) {
+    return parsenv(data);
+  } else {
+    for (const [k, v] of parsenv(data)) {
+      to[k] = v;
+    }
+    return to;
+  }
 }
 
 function parsenv(env) {
@@ -52,12 +50,4 @@ function parsenv(env) {
   );
 }
 
-function envToImportMeta(envpath) {
-  const env = loadenv(envpath);
-  for (const [k, v] of env) {
-    import.meta.env[k] = v;
-  }
-  return import.meta.env;
-}
-
-export { loadenv, envToImportMeta };
+export { loadenv };
