@@ -20,7 +20,13 @@ function isMode(mode) {
   return mode === detectMode();
 }
 
-function getEnvar(envar = "", required = true, defaultValue = "") {
+function getEnvar(
+  envar = "",
+  required = true,
+  defaultValue = "",
+  staticValue = ""
+) {
+  if (staticValue) return staticValue;
   let value;
 
   value = globalThis.__ENV__?.[envar];

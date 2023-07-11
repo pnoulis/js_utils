@@ -181,7 +181,7 @@ function TaskRunner(userConf = {}) {
 TaskRunner.prototype.parseConf = function parseConf(userConf) {
   const conf = {};
   conf.logger = userConf.logger || LOGGER;
-  conf.timeout = userConf.timeout || 3000;
+  conf.timeout = userConf.timeout || 30000;
   conf.pollFrequency = userConf.pollFrequency || 1000;
   conf.isConnected = userConf.isConnected ? userConf.isConnected : () => false;
   return conf;
