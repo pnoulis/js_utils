@@ -17,8 +17,9 @@
   "files": ["dist"],
   "exports": {
     ".": "./dist/index.js",
-    "./*": "./dist/*.js",
+    "./pipeline": "./dist/pipeline/Pipeline.js",
     "./task_runners": "./dist/task_runners/index.js",
+    "./*": "./dist/*.js",
     "./node": "./dist/node/index.js",
     "./node/*": "./dist/node/*.js",
     "./browser": "./dist/browser/index.js",

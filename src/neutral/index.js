@@ -6,3 +6,4 @@ export * from "./misc.js";
 export * from "./generateRandomName.js";
 export * from "./uuid.js";
 export * from "./task_runners/index.js";
+export * from "./pipeline/Pipeline.js";

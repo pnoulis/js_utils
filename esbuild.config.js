@@ -74,6 +74,7 @@ const neutral = {
     "./src/neutral/ConsoleLogger.js",
     "./src/neutral/task_runners/index.js",
     "./src/neutral/task_runners/TaskRunner.js",
+    "./src/neutral/pipeline/Pipeline.js",
   ],
   entryNames: "[dir]/[name]",
   outdir: `${DISTDIR}`,
