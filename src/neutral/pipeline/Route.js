@@ -1,3 +1,4 @@
+import { isObject } from "../misc";
 function Route(pipeline, route, ...middleware) {
   this.route = route;
   this.queue = middleware; // FIFO
@@ -18,7 +19,7 @@ function Route(pipeline, route, ...middleware) {
       await middleware(
         this.context,
         this.runner.bind(this, index + 1 /* next index */),
-        err
+        err,
       );
     }
   };
@@ -34,17 +35,15 @@ function Route(pipeline, route, ...middleware) {
     }
   };
 
-  const exec = async function exec(pipeline, context = {}) {
+  const exec = async function exec(pipeline, ...context) {
     this.queue = pipeline.flat(3);
     this.context = {
       route: this.route,
-      req: {
-        ...context,
-      },
+      req: context,
       res: {},
     };
-    this.prevIndex = -1;
 
+    this.prevIndex = -1;
     await this.errorWrapper(0);
     return this.context.res;
   };

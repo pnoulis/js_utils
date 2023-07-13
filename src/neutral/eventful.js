@@ -66,34 +66,34 @@ function ensureEvent(event) {
 function on(event, listener) {
   this.ensureEvent(event);
   this.events[event].push(this.packageListener(listener, { persist: true }));
-  return this;
+  return () => this.flush(event, listener);
 }
 
 function once(event, listener) {
   this.ensureEvent(event);
   this.events[event].push(this.packageListener(listener, { persist: false }));
-  return this;
+  return () => this.flush(event, listener);
 }
 
 function flush(event, listener, clause) {
   if (/^\*$/.test(event)) {
     return Object.keys(this.events).forEach((event) =>
-      this.flush(event, listener, clause)
+      this.flush(event, listener, clause),
     );
   }
   this.ensureEvent(event);
   if (typeof listener === "function") {
     this.events[event] = this.events[event].filter(
-      (subscriber) => subscriber.listener !== listener
+      (subscriber) => subscriber.listener !== listener,
     );
   } else if (typeof listener === "string") {
     this.events[event] = this.events[event].filter(
-      (subscriber) => subscriber.id !== listener
+      (subscriber) => subscriber.id !== listener,
     );
   } else if (typeof clause === "function") {
     this.events[event] = this.events[event].reduce(
       (car, cdr) => (clause(cdr) ? car : [...car, cdr]),
-      []
+      [],
     );
   } else {
     this.events[event] = [];
@@ -104,7 +104,7 @@ function flush(event, listener, clause) {
 function emit(event, ...args) {
   this.ensureEvent(event);
   [...this.events[event]].forEach(
-    (subscriber) => subscriber.listener && subscriber.listener(...args)
+    (subscriber) => subscriber.listener && subscriber.listener(...args),
   );
   this.events[event] = this.events[event].filter(({ listener, persistent }) => {
     return persistent;

@@ -47,7 +47,7 @@ function areMembersDuplicate(array) {
 
 function delay(time = 1000, shouldReject = false) {
   return new Promise((resolve, reject) =>
-    setTimeout(shouldReject ? reject : resolve, time)
+    setTimeout(shouldReject ? reject : resolve, time),
   );
 }
 
@@ -67,6 +67,16 @@ function extractEvens(array) {
   return evens;
 }
 
+function isObject(val) {
+  return (
+    val !== null && typeof val === "object" && Array.isArray(val) === false
+  );
+}
+
+function isArray(val) {
+  return Array.isArray(val);
+}
+
 export {
   flattenObj,
   capitalize,
@@ -78,4 +88,6 @@ export {
   extractOdds,
   extractEvens,
   delay,
+  isObject,
+  isArray,
 };

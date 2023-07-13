@@ -91,8 +91,8 @@ function getState() {
 function setState(state) {
   const previousState = this.state?.name;
   this.state = state;
-  if ("emit" in this.state) {
-    this.emit("stateChange", this.state.name, previousState);
+  if ("emit" in this) {
+    this.emit("stateChange", this.state.name, previousState, this);
   }
   if ("init" in this.state) {
     this.state.init();
@@ -104,7 +104,7 @@ function inState(state) {
 function compareStates(cb) {
   return cb(
     this.constructor.states.reduce((car, cdr, i) => ({ ...car, [cdr]: i }), {}),
-    this.state.index
+    this.state.index,
   );
 }
 
