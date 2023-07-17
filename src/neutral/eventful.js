@@ -4,7 +4,7 @@
  * @typedef {Object} eventful
  * @property {Array<Object>} events
  **/
-function eventful(target, events = {}) {
+function eventful(target, events = []) {
   // A Function object
   const self = target;
   // An Object
@@ -111,5 +111,13 @@ function emit(event, ...args) {
   });
   return this;
 }
+
+eventful.construct = function () {
+  const events = {};
+  for (let i = 0; i < this.events.length; i++) {
+    events[this.events[i]] = [];
+  }
+  this.events = events;
+};
 
 export { eventful };
