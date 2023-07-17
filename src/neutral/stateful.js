@@ -67,6 +67,13 @@ function stateful(target, states = []) {
       enumerable: true,
       writable: false,
     },
+    getStates: {
+      value: function () {
+        return stateNames;
+      },
+      enumerable: true,
+      writable: false,
+    },
     setState: {
       value: setState,
       enumerable: true,
