@@ -25,7 +25,7 @@ class Pipeline {
      it will do nothing and simply return.
  */
 Pipeline.prototype.globalLast = function globalLast(context, next, err) {
-  console.log("GLOBAL LAST");
+  console.log('GLOBAL LAST');
   if (err) throw err;
   else next();
 };

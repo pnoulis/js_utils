@@ -30,7 +30,8 @@ function Route(pipeline, route, ...middleware) {
     const lnQueue = this.queue.length;
     const context = {
       route: this.route,
-      req: args,
+      args,
+      req: {},
       res: {},
     };
 
@@ -40,12 +41,11 @@ function Route(pipeline, route, ...middleware) {
         await this.runner(context, this.nextIndex, error);
       } catch (err) {
         error = err;
-        throw err;
         // if err this.nextIndex points to the last run middleware.
         // The one that threw an exception.
         this.nextIndex = this.findNextErrHandlerIndex(this.nextIndex + 1);
         if (this.nextIndex === -1) {
-          throw new aferrs.AgentFactoryError('toehuneothu');
+          throw err;
         }
       }
     }
