@@ -1,67 +1,65 @@
-import { isObject } from "../misc";
 function Route(pipeline, route, ...middleware) {
   this.route = route;
-  this.queue = middleware; // FIFO
-  this.prevIndex = undefined;
-  this.context = undefined;
+  this.middleware = middleware;
+  this.queue = null;
+  this.nextIndex = 0;
 
-  this.nextErrHandler = function nextErrHandler() {
-    for (let i = this.prevIndex + 1; i < this.queue.length; i++) {
-      if (this.queue.at(i).length > 2) return i;
+  this.findNextErrHandlerIndex = function (start) {
+    const lnQueue = this.queue.length;
+    for (; start < lnQueue; start++) {
+      if (this.queue.at(start).length > 2) return start;
     }
     return -1;
   };
 
-  this.runner = async function runner(index, err) {
-    this.prevIndex = err ? this.nextErrHandler() : index;
-    const middleware = this.queue.at(this.prevIndex /* current index*/);
+  this.runner = async function runner(context, index, err) {
+    this.nextIndex = index;
+    const middleware = this.queue.at(this.nextIndex);
     if (middleware) {
       await middleware(
-        this.context,
-        this.runner.bind(this, index + 1 /* next index */),
+        context,
+        this.runner.bind(this, context, index + 1),
         err,
       );
     }
   };
 
-  this.errorWrapper = async function errorWrapper(index, err) {
-    try {
-      await this.runner(index, err);
-    } catch (err) {
-      if (this.prevIndex >= this.queue.length - 2) {
-        return this.runner(index, err);
-      }
-      await this.errorWrapper(index, err);
-    }
-  };
-
-  const exec = async function exec(pipeline, ...context) {
+  const exec = async function exec(pipeline, ...args) {
     this.queue = pipeline.flat(3);
-    this.context = {
+    this.nextIndex = 0;
+    const lnQueue = this.queue.length;
+    const context = {
       route: this.route,
-      req: context,
+      req: args,
       res: {},
     };
 
-    this.prevIndex = -1;
-    await this.errorWrapper(0);
-    return this.context.res;
+    let error = null;
+    while (this.nextIndex < lnQueue) {
+      try {
+        await this.runner(context, this.nextIndex, error);
+      } catch (err) {
+        error = err;
+        throw err;
+        // if err this.nextIndex points to the last run middleware.
+        // The one that threw an exception.
+        this.nextIndex = this.findNextErrHandlerIndex(this.nextIndex + 1);
+        if (this.nextIndex === -1) {
+          throw new aferrs.AgentFactoryError('toehuneothu');
+        }
+      }
+    }
+    this.queue = null;
+    return context;
   };
 
   const skipNone = exec.bind(this, [
     pipeline.beforeAll,
-    this.queue.map((handler) => [
-      pipeline.beforeEach,
-      handler,
-      pipeline.afterEach,
-    ]),
+    middleware.map((m) => [pipeline.beforeEach, m, pipeline.afterEach]),
     pipeline.afterAll,
-    pipeline.last.bind(pipeline, true),
+    pipeline.globalLast,
   ]);
-  skipNone.skipAll = exec.bind(this, [
-    this.queue,
-    pipeline.last.bind(pipeline, false),
-  ]);
+  skipNone.skipAll = exec.bind(this, [this.middleware]);
   return skipNone;
 }
 

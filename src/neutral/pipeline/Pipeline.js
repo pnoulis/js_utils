@@ -1,7 +1,6 @@
 import { Route } from "./Route.js";
 class Pipeline {
   constructor() {
-    this.globalLast = null;
     this.beforeAll = [];
     this.beforeEach = [];
     this.afterAll = [];
@@ -25,12 +24,10 @@ class Pipeline {
   2. In case of it being the last of an error-less pipeline
      it will do nothing and simply return.
  */
-Pipeline.prototype.last = function last(callGlobalLast, context, next, err) {
-  if (callGlobalLast && this.globalLast) {
-    return this.globalLast(context, err);
-  } else {
-    if (err) throw err;
-  }
+Pipeline.prototype.globalLast = function globalLast(context, next, err) {
+  console.log("GLOBAL LAST");
+  if (err) throw err;
+  else next();
 };
 
 Pipeline.prototype.flush = function flush() {
