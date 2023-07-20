@@ -39,7 +39,7 @@ function stateful(target, states = []) {
       },
     });
 
-    // define getters for each state in the CALLING CONTEXT
+    // define getters for each state in the CALLING CONTEXT PROTOTYPE
     Object.defineProperty(prototype, `get${capitalize(stateNames[i])}State`, {
       enumerable: true,
       configurable: false,
@@ -49,8 +49,22 @@ function stateful(target, states = []) {
     });
   });
 
+  // define properties in the CALLING CONTEXT CONSTRUCTOR
+  Object.defineProperty(self, "states", {
+    value: stateNames,
+    enumerable: true,
+    writable: false,
+    configurable: false,
+  });
+
   // define properties in the CALLING CONTEXT PROTOTYPE
   Object.defineProperties(prototype, {
+    stateNames: {
+      value: stateNames,
+      enumerable: true,
+      writable: false,
+      configurable: false,
+    },
     states: {
       value: stateInstances,
       enumerable: true,
@@ -64,13 +78,6 @@ function stateful(target, states = []) {
     },
     getState: {
       value: getState,
-      enumerable: true,
-      writable: false,
-    },
-    getStates: {
-      value: function () {
-        return stateNames;
-      },
       enumerable: true,
       writable: false,
     },
@@ -92,11 +99,22 @@ function stateful(target, states = []) {
   });
 }
 
-function getState() {
-  return this.state.name;
+function getState(state) {
+  if (state) {
+    for (let i = 0; i < this.states.length; i++) {
+      if (this.states[i].name === state) return this.states[i];
+    }
+  } else {
+    return this.state;
+  }
+  throw new Error(`Unrecognized state: ${state}`);
 }
+
 function setState(state) {
   const previousState = this.state?.name;
+  if (typeof state === "string") {
+    state = this.getState(state);
+  }
   this.state = state;
   if ("emit" in this) {
     this.emit("stateChange", this.state.name, previousState, this);
@@ -108,11 +126,23 @@ function setState(state) {
 function inState(state) {
   return state === this.state.name || state === this.state.index;
 }
+
+/*
+  cb({ unregistered: 0, registered: 1, inTeam: 2, inGame: 3 }, currentStateIndex)
+
+  @example
+
+  cb((states, currentStateIndex) => {
+  return (currentStateIndex < states.inTeam);
+  }) -> true | false
+ */
 function compareStates(cb) {
-  return cb(
-    this.constructor.states.reduce((car, cdr, i) => ({ ...car, [cdr]: i }), {}),
-    this.state.index,
-  );
+  const states = {};
+  const lnStates = this.stateNames.length;
+  for (let i = 0; i < lnStates; i++) {
+    states[this.stateNames[i]] = i;
+  }
+  return cb(states, this.state.index);
 }
 
 stateful.construct = function () {
