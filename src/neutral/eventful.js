@@ -12,7 +12,7 @@ function eventful(target, events = []) {
 
   Object.defineProperties(prototype, {
     events: {
-      value: events,
+      value: [...events, "error"],
       enumerable: true,
       writable: true,
     },

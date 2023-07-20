@@ -1,4 +1,4 @@
-import { extractOdds, extractEvens, capitalize } from "./misc.js";
+import { extractOdds, extractEvens, capitalize, isObject } from "./misc.js";
 /**
  * Stateful
  *
@@ -118,11 +118,10 @@ function setState(state) {
   this.state = state;
 
   // eventful integration
-  try {
+  if (typeof this.emit === 'function' && isObject(this.events)) {
     this.emit("stateChange", this.state.name, previousState, this);
-  } catch (err) {
-
   }
+
   if (Object.hasOwn(this.state, "init")) {
     this.state.init();
   }
@@ -151,7 +150,7 @@ function compareStates(cb) {
 
 stateful.construct = function () {
   this.states = this.states.map((state) => new state(this));
-  this.setState(this.states[0]);
+  this.state = this.states[0];
 };
 
 export { stateful };
