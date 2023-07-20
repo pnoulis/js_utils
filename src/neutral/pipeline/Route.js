@@ -24,13 +24,17 @@ function Route(pipeline, route, ...middleware) {
     }
   };
 
-  const exec = async function exec(pipeline, ...args) {
+  const exec = async function exec(pipeline, args = {}, options = {}) {
     this.queue = pipeline.flat(3);
     this.nextIndex = 0;
     const lnQueue = this.queue.length;
     const context = {
       route: this.route,
-      args,
+      args: { ...args },
+      options: {
+        onlyData: true,
+        ...options,
+      },
       req: {},
       res: {},
     };
@@ -50,7 +54,13 @@ function Route(pipeline, route, ...middleware) {
       }
     }
     this.queue = null;
-    return context;
+    if (context?.options?.onlyData) {
+      return context.res.data;
+    } else {
+      delete context.args;
+      delete context.options;
+      return context;
+    }
   };
 
   const skipNone = exec.bind(this, [

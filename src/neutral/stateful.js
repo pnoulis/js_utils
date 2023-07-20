@@ -116,10 +116,14 @@ function setState(state) {
     state = this.getState(state);
   }
   this.state = state;
-  if ("emit" in this) {
+
+  // eventful integration
+  try {
     this.emit("stateChange", this.state.name, previousState, this);
+  } catch (err) {
+
   }
-  if ("init" in this.state) {
+  if (Object.hasOwn(this.state, "init")) {
     this.state.init();
   }
 }
