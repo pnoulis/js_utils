@@ -122,7 +122,7 @@ function setState(state) {
     this.emit("stateChange", this.state.name, previousState, this);
   }
 
-  if (Object.hasOwn(this.state, "init")) {
+  if ('init' in this.state) {
     this.state.init();
   }
 }
