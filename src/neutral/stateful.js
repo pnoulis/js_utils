@@ -59,12 +59,6 @@ function stateful(target, states = []) {
 
   // define properties in the CALLING CONTEXT PROTOTYPE
   Object.defineProperties(prototype, {
-    stateNames: {
-      value: stateNames,
-      enumerable: true,
-      writable: false,
-      configurable: false,
-    },
     states: {
       value: stateInstances,
       enumerable: true,
@@ -118,11 +112,11 @@ function setState(state) {
   this.state = state;
 
   // eventful integration
-  if (typeof this.emit === 'function' && isObject(this.events)) {
+  if (typeof this.emit === "function" && isObject(this.events)) {
     this.emit("stateChange", this.state.name, previousState, this);
   }
 
-  if ('init' in this.state) {
+  if ("init" in this.state) {
     this.state.init();
   }
 }
@@ -141,9 +135,9 @@ function inState(state) {
  */
 function compareStates(cb) {
   const states = {};
-  const lnStates = this.stateNames.length;
+  const lnStates = this.constructor.states.length;
   for (let i = 0; i < lnStates; i++) {
-    states[this.stateNames[i]] = i;
+    states[this.constructor.states[i]] = i;
   }
   return cb(states, this.state.index);
 }
