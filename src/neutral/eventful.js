@@ -36,6 +36,11 @@ function eventful(target, events = []) {
       enumerable: true,
       writable: false,
     },
+    hasEvent: {
+      value: hasEvent,
+      enumerable: true,
+      writable: false,
+    },
     flush: {
       value: flush,
       enumerable: true,
@@ -73,6 +78,10 @@ function once(event, listener) {
   this.ensureEvent(event);
   this.events[event].push(this.packageListener(listener, { persist: false }));
   return () => this.flush(event, listener);
+}
+
+function hasEvent(event) {
+  return Object.hasOwn(this.events, event);
 }
 
 function flush(event, listener, clause) {
