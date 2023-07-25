@@ -95,13 +95,20 @@ function stateful(target, states = []) {
 
 function getState(state) {
   if (state) {
-    for (let i = 0; i < this.states.length; i++) {
-      if (this.states[i].name === state) return this.states[i];
+    const lnStates = this.states.length;
+    if (typeof state === "string") {
+      for (let i = 0; i < lnStates; i++) {
+        if (this.states[i].name === state) return this.states[i];
+      }
+    } else if (isObject(state)) {
+      for (let i = 0; i < lnStates; i++) {
+        if (this.states[i].name === state.name) return state;
+      }
     }
-  } else {
-    return this.state;
+    throw new Error(`Unrecognized state: ${state}`);
   }
-  throw new Error(`Unrecognized state: ${state}`);
+
+  return this.state;
 }
 
 function setState(state) {
@@ -119,6 +126,7 @@ function setState(state) {
   if ("init" in this.state) {
     this.state.init();
   }
+  return this;
 }
 function inState(state) {
   return state === this.state.name || state === this.state.index;
