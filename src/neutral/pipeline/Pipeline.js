@@ -24,8 +24,7 @@ class Pipeline {
   2. In case of it being the last of an error-less pipeline
      it will do nothing and simply return.
  */
-Pipeline.prototype.globalLast = function globalLast(context, next, err) {
-  console.log('GLOBAL LAST');
+Pipeline.prototype.globalLast = async function globalLast(context, next, err) {
   if (err) throw err;
   else next();
 };
