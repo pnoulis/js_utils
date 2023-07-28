@@ -23,7 +23,7 @@ function capitalize(...strings) {
 }
 
 // min, max included
-function randomInteger(min, max) {
+function randomInteger(min = 0, max = 25000) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -36,6 +36,15 @@ function areMembersUnique(array) {
   for (let i = 0; i < array.length; i++) {
     for (let y = i + 1; y < array.length; y++) {
       if (array[i] === array[y]) return false;
+    }
+  }
+  return true;
+}
+
+function areMembersUniqueCb(array, clause) {
+  for (let i = 0; i < array.length; i++) {
+    for (let y = i + 1; y < array.length; y++) {
+      if (clause(array[i], array[y])) return false;
     }
   }
   return true;
@@ -84,6 +93,7 @@ export {
   randomInteger,
   randomReal,
   areMembersUnique,
+  areMembersUniqueCb,
   areMembersDuplicate,
   extractOdds,
   extractEvens,
