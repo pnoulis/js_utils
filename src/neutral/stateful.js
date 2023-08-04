@@ -19,12 +19,11 @@ function stateful(target, states = []) {
   const prototype = target.prototype;
   const stateNames = extractOdds(states);
   const stateInstances = extractEvens(states);
-
   stateInstances.forEach((state, i) => {
     // define a name property in each STATE INSTANCE
     Object.defineProperty(state.prototype, "name", {
       enumerable: true,
-      configurable: false,
+      configurable: true,
       get: function () {
         return stateNames[i];
       },
@@ -33,7 +32,7 @@ function stateful(target, states = []) {
     // define an index property in each STATE INSTANCE
     Object.defineProperty(state.prototype, "index", {
       enumerable: true,
-      configurable: false,
+      configurable: true,
       get: function () {
         return i;
       },
@@ -42,7 +41,7 @@ function stateful(target, states = []) {
     // define getters for each state in the CALLING CONTEXT PROTOTYPE
     Object.defineProperty(prototype, `get${capitalize(stateNames[i])}State`, {
       enumerable: true,
-      configurable: false,
+      configurable: true,
       get: function () {
         return this.states[i];
       },
@@ -53,8 +52,8 @@ function stateful(target, states = []) {
   Object.defineProperty(self, "states", {
     value: stateNames,
     enumerable: true,
-    writable: false,
-    configurable: false,
+    writable: true,
+    configurable: true,
   });
 
   // define properties in the CALLING CONTEXT PROTOTYPE
@@ -68,27 +67,32 @@ function stateful(target, states = []) {
     state: {
       value: null,
       enumerable: true,
+      configurable: true,
       writable: true,
     },
     getState: {
       value: getState,
       enumerable: true,
-      writable: false,
+      writable: true,
+      configurable: true,
     },
     setState: {
       value: setState,
       enumerable: true,
-      writable: false,
+      writable: true,
+      configurable: true,
     },
     inState: {
       value: inState,
       enumerable: true,
-      writable: false,
+      writable: true,
+      configurable: true,
     },
     compareStates: {
       value: compareStates,
       enumerable: true,
-      writable: false,
+      writable: true,
+      configurable: true,
     },
   });
 }
