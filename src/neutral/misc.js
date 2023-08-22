@@ -86,6 +86,10 @@ function isArray(val) {
   return Array.isArray(val);
 }
 
+function isFunction(val) {
+  return typeof val === "function";
+}
+
 export {
   flattenObj,
   capitalize,
@@ -100,4 +104,5 @@ export {
   delay,
   isObject,
   isArray,
+  isFunction,
 };
