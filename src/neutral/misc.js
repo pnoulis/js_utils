@@ -82,6 +82,11 @@ function isObject(val) {
   );
 }
 
+function isObjectEmpty(val) {
+  if (!isObject(val)) throw new Error(`isObjectEmpty: input not an object`);
+  return Object.getOwnPropertyNames(val) > 0;
+}
+
 function isArray(val) {
   return Array.isArray(val);
 }
@@ -103,6 +108,7 @@ export {
   extractEvens,
   delay,
   isObject,
+  isObjectEmpty,
   isArray,
   isFunction,
 };
