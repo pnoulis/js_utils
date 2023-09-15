@@ -1,4 +1,5 @@
 import { generateRandomName } from "./generateRandomName.js";
+import isNumber from "is-number";
 
 function flattenObj(obj) {
   const result = {};
@@ -95,8 +96,54 @@ function isFunction(val) {
   return typeof val === "function";
 }
 
+function filterObject(
+  source,
+  {
+    include = [],
+    exclude = [],
+    asArray = false,
+    deepClone = false /* TODO */,
+    transform /* TODO */,
+  } = {},
+) {
+  let filtered;
+  if (include?.length >= 1) {
+    filtered = {};
+    for (let i = 0; i < include.length; i++) {
+      if (!Object.hasOwn(source, include[i])) {
+        throw new Error(`Unrecognized include key: ${include[i]}`);
+      }
+      filtered[include[i]] = source[include[i]];
+    }
+  } else if (exclude?.length >= 1) {
+    filtered = { ...source };
+    for (let i = 0; i < exclude.length; i++) {
+      if (!Object.hasOwn(source, exclude[i])) {
+        throw new Error(`Unrecognized exclude key: ${exclude[i]}`);
+      }
+      delete filtered[exclude[i]];
+    }
+  } else {
+    filtered = { ...source };
+  }
+  return (() => {
+    if (!asArray) return filtered;
+    const keys = Object.keys(filtered);
+    const ln = keys.length;
+    const filteredArray = new Array(ln);
+    for (let i = 0; i < ln; i++) {
+      filteredArray[i] = {
+        key: keys[i],
+        value: filtered[keys[i]],
+      };
+    }
+    return filteredArray;
+  })();
+}
+
 export {
   flattenObj,
+  filterObject,
   capitalize,
   generateRandomName,
   randomInteger,
@@ -111,4 +158,5 @@ export {
   isObjectEmpty,
   isArray,
   isFunction,
+  isNumber,
 };
