@@ -96,6 +96,28 @@ function isFunction(val) {
   return typeof val === "function";
 }
 
+/*
+ remove the 1st element
+console.log("remove 1st element: ", removeIndex(arr, 0));
+
+remove the last element
+console.log("remove last element: ", removeIndex(arr, arr.length - 1));
+
+remove a middle element
+console.log("remove 3rd element ", removeIndex(arr, 2));
+ */
+function removeIndex(arr, index) {
+  if (index === 0) {
+    return arr.slice(1);
+  } else if (index < arr.length - 1) {
+    return arr.slice(0, index).concat(arr.slice(index + 1));
+  } else if (index === arr.length - 1) {
+    return arr.slice(0, -1);
+  } else {
+    throw new Error(`Invalid index: ${index}`);
+  }
+}
+
 function filterObject(
   source,
   {
@@ -159,4 +181,5 @@ export {
   isArray,
   isFunction,
   isNumber,
+  removeIndex,
 };
