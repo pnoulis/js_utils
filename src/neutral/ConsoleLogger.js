@@ -14,11 +14,17 @@ ConsoleLogger.prototype.levels = {
 
 ConsoleLogger.prototype.trace = function trace(...args) {
   if (this.logLevel < this.levels.trace) return;
+  console.log(
+    "--------------------------------------------------------------------------------",
+  );
   console.log(...args);
 };
 
 ConsoleLogger.prototype.debug = function debug(...args) {
   if (this.logLevel < this.levels.debug) return;
+  console.log(
+    "--------------------------------------------------------------------------------",
+  );
   console.log(...args);
 };
 
