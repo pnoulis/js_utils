@@ -1,19 +1,9 @@
 import * as esbuild from "esbuild";
 
-/*
-  import from the environment:
-  SRCDIR
-  BUILDIR
-  DISTDIR
-  MODE
- */
-
-const SRCDIR = ".";
-const BUILDIR = SRCDIR;
-const DISTDIR = `${BUILDIR}/dist`;
+const DISTDIR = process.env.DISTDIR;
 const MODE = process.env.MODE;
-let BUILD_OPTIONS = undefined;
 
+let BUILD_OPTIONS;
 if (MODE === "production") {
   BUILD_OPTIONS = {
     drop: ["console"],

@@ -4,9 +4,7 @@
   "description": "js_utils-summary",
   "homepage": "https://github.com/pnoulis/js_utils#readme",
   "bugs": "https://github.com/pnoulis/js_utils/issues",
-  "keywords": [
-    "js_utils-keywords"
-  ],
+  "keywords": ["js_utils-keywords"],
   "repository": {
     "type": "git",
     "url": "https://github.com/pnoulis/js_utils.git"
@@ -14,11 +12,10 @@
   "scripts": {
     "dev": "make run",
     "build": "make build",
-    "test": "make test"
+    "test": "make test",
+    "prepack": "MODE=production make build"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
     ".": "./dist/index.js",
     "./pipeline": "./dist/pipeline/Pipeline.js",
