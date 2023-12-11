@@ -15,7 +15,7 @@
     "test": "make test",
     "prepack": "MODE=production make build"
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "PACKAGE", "package.json"],
   "exports": {
     ".": "./dist/index.js",
     "./pipeline": "./dist/pipeline/Pipeline.js",
