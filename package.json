@@ -14,7 +14,7 @@
     "build": "make build",
     "test": "make test"
   },
-  "files": ["dist", "README.md", "PACKAGE", "package.json"],
+  "files": ["dist"],
   "exports": {
     ".": "./dist/index.js",
     "./pipeline": "./dist/pipeline/Pipeline.js",
