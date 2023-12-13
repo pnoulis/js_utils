@@ -21,12 +21,40 @@ BUNDLER = esbuild
 
 # Mode
 MODE?=production
+node=node
 
 all: build
 
 build:
 	rm -rf $(SRCDIR)/dist
 	$(NODE) $(BUNDLER).config.js
+
+run: file?=tmp/scratch.js
+run: $(file)
+	@if [[ "$${file:-}" == "" ]]; then
+		echo "Usage: 'make run file [args]'"
+		exit 1
+	fi
+	extension="$${file##*.}"
+	case $$extension in
+	sh)
+		$(SHELL) $(file) $(args)
+		;;
+	js)
+		$(node) $(file) $(args)
+		;;
+	*)
+		echo "Unrecognized extension: $$extension"
+		echo "Failed to 'make $@ $^'"
+		;;
+	esac
+
+.DEFAULT:
+	@if [ ! -f "$<" ]; then
+	echo "Missing file $${file:-}"
+	exit 1
+	fi
+
 
 .PHONY: build
 .PHONY: all

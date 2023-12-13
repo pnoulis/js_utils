@@ -1,3 +1,5 @@
+import { isObject, isArray } from "./misc.js";
+
 // runtime detection
 const browser = globalThis.window;
 const webWorker = !browser && globalThis.self;
@@ -20,32 +22,38 @@ function isMode(mode) {
   return mode === detectMode();
 }
 
+/*
+  Best way to use:
+  const specializedGetEnvar = getEnvar.bind(null, ENV, [sources...])
+  specializedGetEnvar('ENVAR_NAME');
+ */
 function getEnvar(
+  target,
+  sources,
   envar = "",
-  required = true,
-  defaultValue = "",
-  staticValue = ""
+  { required = false, defaultValue, staticValue } = {},
 ) {
-  if (staticValue) return staticValue;
-  let value;
+  const _envar =
+    globalThis.process?.env[envar] ||
+    (function parseSource(source) {
+      if (isArray(source)) {
+        for (let i = source.length - 1; i >= 0; i--) {
+          const _envar = parseSource(source[i]);
+          if (_envar) return _envar;
+        }
+      }
+      return isObject(source) ? source[envar] : source;
+    })(sources) ||
+    staticValue ||
+    defaultValue ||
+    undefined;
 
-  value = globalThis.__ENV__?.[envar];
-  if (value) {
-    return value;
-  }
-  value = import.meta.env?.[envar];
-  if (value) {
-    return value;
-  }
-  value = globalThis.process?.env[envar];
-  if (value) {
-    return value;
-  }
-  value = defaultValue;
-  if (!value && required) {
+  if (required && !_envar) {
     throw new Error(`Missing environment variable:${envar}`);
   }
-  return value || defaultValue;
+
+  if (target) return Object.assign(target, { [envar]: _envar });
+  return _envar;
 }
 
 export { detectRuntime, isRuntime, detectMode, isMode, getEnvar };
