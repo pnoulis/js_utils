@@ -28,13 +28,12 @@ function isMode(mode) {
   specializedGetEnvar('ENVAR_NAME');
  */
 function getEnvar(
-  target,
   sources,
+  target,
   envar = "",
-  { required = false, defaultValue, staticValue } = {},
+  { required = false, defaultValue, staticValue, ignoreTarget, rename } = {},
 ) {
   const _envar =
-    globalThis.process?.env[envar] ||
     (function parseSource(source) {
       if (isArray(source)) {
         for (let i = source.length - 1; i >= 0; i--) {
@@ -42,7 +41,7 @@ function getEnvar(
           if (_envar) return _envar;
         }
       }
-      return isObject(source) ? source[envar] : source;
+      return isObject(source) ? source?.[envar] : source;
     })(sources) ||
     staticValue ||
     defaultValue ||
@@ -50,10 +49,10 @@ function getEnvar(
 
   if (required && !_envar) {
     throw new Error(`Missing environment variable:${envar}`);
+  } else if (ignoreTarget) {
+    return _envar;
   }
-
-  if (target) return Object.assign(target, { [envar]: _envar });
-  return _envar;
+  return Object.assign(target ?? {}, { [rename ?? envar]: _envar });
 }
 
 export { detectRuntime, isRuntime, detectMode, isMode, getEnvar };
