@@ -25,11 +25,16 @@ function isMode(mode) {
 function parseEnvSource(source, key) {
   if (isArray(source)) {
     for (let i = source.length - 1; i >= 0; i--) {
-      const envar = parseEnvSource(source[i]);
+      const envar = parseEnvSource(source[i], key);
       if (envar) return envar;
     }
   }
-  return isObject(source) ? source[key] : source;
+  if (isObject(source)) {
+    console.log('object is source');
+    console.log(key)
+    console.log(source[key]);
+  }
+  return isObject(source) ? source?.[key] : source;
 }
 
 /*
