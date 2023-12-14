@@ -22,14 +22,14 @@ function isMode(mode) {
   return mode === detectMode();
 }
 
-function parseEnvSource(source) {
+function parseEnvSource(source, key) {
   if (isArray(source)) {
     for (let i = source.length - 1; i >= 0; i--) {
       const envar = parseEnvSource(source[i]);
       if (envar) return envar;
     }
   }
-  return isObject(source) ? source[envar] : source;
+  return isObject(source) ? source[key] : source;
 }
 
 /*
@@ -43,7 +43,7 @@ function getEnvar(
   envar = "",
   { required = false, defaultValue, staticValue, ignoreTarget, rename } = {},
 ) {
-  const _envar = parseEnvSource(sources) || staticValue || defaultValue;
+  const _envar = parseEnvSource(sources, envar) || staticValue || defaultValue;
   if (required && !_envar) {
     throw new Error(`Missing environment variable:${envar}`);
   } else if (ignoreTarget) {
