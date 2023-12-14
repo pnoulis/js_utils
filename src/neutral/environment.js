@@ -22,6 +22,16 @@ function isMode(mode) {
   return mode === detectMode();
 }
 
+function parseEnvSource(source) {
+  if (isArray(source)) {
+    for (let i = source.length - 1; i >= 0; i--) {
+      const envar = parseEnvSource(source[i]);
+      if (envar) return envar;
+    }
+  }
+  return isObject(source) ? source[envar] : source;
+}
+
 /*
   Best way to use:
   const specializedGetEnvar = getEnvar.bind(null, ENV, [sources...])
@@ -33,20 +43,7 @@ function getEnvar(
   envar = "",
   { required = false, defaultValue, staticValue, ignoreTarget, rename } = {},
 ) {
-  const _envar =
-    (function parseSource(source) {
-      if (isArray(source)) {
-        for (let i = source.length - 1; i >= 0; i--) {
-          const _envar = parseSource(source[i]);
-          if (_envar) return _envar;
-        }
-      }
-      return isObject(source) ? source?.[envar] : source;
-    })(sources) ||
-    staticValue ||
-    defaultValue ||
-    undefined;
-
+  const _envar = parseEnvSource(sources) || staticValue || defaultValue;
   if (required && !_envar) {
     throw new Error(`Missing environment variable:${envar}`);
   } else if (ignoreTarget) {
