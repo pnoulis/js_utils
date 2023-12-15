@@ -1,4 +1,4 @@
-import { isObject, isArray } from "./misc.js";
+import { isObject, isArray, isString, isNumber } from "./misc.js";
 
 // runtime detection
 const browser = globalThis.window;
@@ -29,12 +29,9 @@ function parseEnvSource(source, key) {
       if (envar) return envar;
     }
   }
-  if (isObject(source)) {
-    console.log('object is source');
-    console.log(key)
-    console.log(source[key]);
-  }
-  return isObject(source) ? source?.[key] : source;
+  return isObject(source)
+    ? source[key]
+    : (isString(source) || isNumber(source)) && source;
 }
 
 /*

@@ -77,23 +77,27 @@ function extractEvens(array) {
   return evens;
 }
 
+function isFunction(val) {
+  return typeof val === "function";
+}
+
 function isObject(val) {
   return (
     val !== null && typeof val === "object" && Array.isArray(val) === false
   );
 }
 
-function isObjectEmpty(val) {
-  if (!isObject(val)) throw new Error(`isObjectEmpty: input not an object`);
-  return Object.getOwnPropertyNames(val) > 0;
-}
-
 function isArray(val) {
   return Array.isArray(val);
 }
 
-function isFunction(val) {
-  return typeof val === "function";
+function isString(val) {
+  return typeof val === "string" || val instanceof String;
+}
+
+function isObjectEmpty(val) {
+  if (!isObject(val)) throw new Error(`isObjectEmpty: input not an object`);
+  return Object.getOwnPropertyNames(val) > 0;
 }
 
 /*
@@ -176,10 +180,11 @@ export {
   extractOdds,
   extractEvens,
   delay,
-  isObject,
   isObjectEmpty,
+  isObject,
   isArray,
   isFunction,
   isNumber,
+  isString,
   removeIndex,
 };
