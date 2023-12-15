@@ -45,7 +45,7 @@ function getEnvar(
   envar = "",
   { required = false, defaultValue, staticValue, ignoreTarget, rename } = {},
 ) {
-  const _envar = parseEnvSource(sources, envar) || staticValue || defaultValue;
+  const _envar = parseEnvSource(sources, envar) || staticValue || defaultValue || "";
   if (required && !_envar) {
     throw new Error(`Missing environment variable:${envar}`);
   } else if (ignoreTarget) {
