@@ -55,6 +55,27 @@ function areMembersDuplicate(array) {
   return !areMembersUnique(array);
 }
 
+function unique(array, compareFn) {
+  const uniq = [];
+  let i = 0;
+  let y = 0;
+  for (; i < array.length; i++) {
+    while (y < i) {
+      if (
+        isFunction(compareFn)
+          ? compareFn(uniq[y], array[i])
+          : uniq[y] === array[i]
+      ) {
+        break;
+      }
+      y++;
+    }
+    if (y === i) uniq.push(array[i]);
+    y = 0;
+  }
+  return uniq;
+}
+
 function delay(time = 1000, shouldReject = false) {
   return new Promise((resolve, reject) =>
     setTimeout(shouldReject ? reject : resolve, time),
@@ -187,4 +208,5 @@ export {
   isNumber,
   isString,
   removeIndex,
+  unique,
 };
