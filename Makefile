@@ -56,5 +56,10 @@ run: $(file)
 	fi
 
 
+clean:
+	rm -rf node_modules
+	rm -f package-lock.json
+
+.PHONY: clean
 .PHONY: build
 .PHONY: all
